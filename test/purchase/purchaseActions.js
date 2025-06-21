@@ -48,9 +48,19 @@ class PurchaseActions {
     expect(message).toContain("Thank you");
   }
 
-  async verifyCartHasItems(count = 3) {
+  // async verifyCartHasItems(count = 3) {
+  //   const items = await Checkout.cartItems;
+  //   expect(items.length).toBe(count);
+  // }
+
+  async verifyCartHasItems(expectedCount) {
     const items = await Checkout.cartItems;
-    expect(items.length).toBe(count);
+
+    if (!Array.isArray(items)) {
+      throw new Error(`Expected array of cart items but got ${typeof items}`);
+    }
+
+    expect(items.length).toBe(expectedCount);
   }
 
   //////////////////////////////////
@@ -66,12 +76,18 @@ class PurchaseActions {
   }
 
   async getProductNamesInCart() {
-    const names = await Checkout.cartItems;
-    console.log("cartItems is:", names, Array.isArray(names));
+    const items = await Checkout.cartItems;
+    // Validate it's an array
+    if (!Array.isArray(items)) {
+      throw new Error(
+        `Expected an array of cart items, but got: ${typeof items}, value: ${items}`
+      );
+    }
+
     return Promise.all(
-      names.map(async (item) => {
-        const name = await item.$(".inventory_item_name").getText();
-        return name;
+      items.map(async (item) => {
+        const nameElem = await item.$(".inventory_item_name");
+        return await nameElem.getText();
       })
     );
   }
