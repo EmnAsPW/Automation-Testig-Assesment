@@ -21,8 +21,8 @@ exports.config = {
   // of the config file unless it's absolute.
   //
   specs: [
-    "./test/specs/alogin.specs.js",
-    // "./test/specs/bPurchase.specs.js",
+    // "./test/specs/alogin.specs.js",
+    "./test/specs/bPurchase.specs.js",
     // "./test/specs/cperformance.specs.js",
   ],
 
@@ -128,7 +128,17 @@ exports.config = {
   // Test reporter for stdout.
   // The only one supported by default is 'dot'
   // see also: https://webdriver.io/docs/dot-reporter
-  reporters: ["spec"],
+  // reporters: ["spec"],
+  reporters: [
+    [
+      "allure",
+      {
+        outputDir: "allure-results",
+        disableWebdriverStepsReporting: false,
+        disableWebdriverScreenshotsReporting: true,
+      },
+    ],
+  ],
 
   // Options to be passed to Mocha.
   // See the full list at http://mochajs.org/
